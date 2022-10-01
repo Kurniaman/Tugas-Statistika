@@ -1,0 +1,66 @@
+---
+title: "Tugas6_Statistika C_5026211056_Kurniaman Andreas Zega"
+output: html_document
+date: '2022-05-18'
+---
+## Categorical Data
+## Source
+```{r load-data}
+download.file("http://www.openintro.org/stat/data/atheism.RData", destfile = "atheism.RData")
+load("atheism.RData")
+```
+## 1
+The question of atheism was asked by WIN-Gallup International in a similar 
+survey that was conducted in 2005. (We assume here that sample sizes have 
+remained the same.) Table 4 on page 13 of the report summarizes survey results 
+from 2005 and 2012 for 39 countries.
+
+Answer the following two questions using the `inference` function. As 
+always, write out the hypotheses for any tests you conduct and outline the
+status of the conditions for inference.
+
+a.Is there convincing evidence that Spain has seen a change in its 
+atheism index between 2005 and 2012?
+
+*Hint:* Create a new data set for respondents from Spain. Form
+confidence intervals for the true proportion of athiests in both
+years, and determine whether they overlap.
+##Jawaban a
+-> H0 = Ada perubahan yang cukup signifikan pada atheism index di Spanyol antara tahun 2005 dengan 2012
+-> HA = Tidak ada perubahan yang cukup signifikan pada atheism index di Spanyol antara tahun 2005 dengan 2012
+
+```{r spain 2005-2012}
+spain05 <- subset(atheism, nationality == "Spain" & year == "2005")
+spain05$nationality <- as.factor(as.character(spain05$nationality))
+table(spain05$nationality, spain05$response)
+
+spain12 <- subset(atheism, nationality == "Spain" & year == "2012")
+spain12$nationality <- as.factor(as.character(spain12$nationality))
+table(spain12$nationality, spain12$response)
+```
+```{r inference spain 2005-2012}
+inference(spain05$response, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+inference(spain12$response, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+```
+
+Jika dilihat dengan seksama, kita bisa melihat adanya overlapping yang cukup signifikan pada confidence interval data tahun 2005 dengan 2012. Karena adanya overlapping itu, maka H0 (null hypothesis) tidak bisa diabaikan. Dengan demikian dapat disimpulkan bahwa tidak terdapat perubahan pada atheism index di Spanyol antara tahun 2005 dan 2012.
+
+b.Is there convincing evidence that the United States has seen a change in its atheism index between 2005 and 2012?
+##Jawaban
+H0 = Ada perubahan yang cukup signifikan pada atheism index di US antara tahun 2005 dengan 2012.
+HA = Tidak ada perubahan yang signifikan pada atheism index di US antara tahun 2005 dengan 2012.
+
+```{r us-2005-2012}
+us05 <- subset(atheism, nationality == "United States" & year == "2005")
+us05$nationality <- as.factor(as.character(us05$nationality))
+table(us05$nationality, us05$response)
+
+us12 <- subset(atheism, nationality == "United States" & year == "2012")
+us12$nationality <- as.factor(as.character(us12$nationality))
+table(us12$nationality, us12$response)
+```
+```{r inference-us-2005-2012}
+inference(us05$response, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+inference(us12$response, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+```
+Jika dilihat dengan seksama, hasil analisis data menunjukkan bahwa tidak terdapat overlap pada nilai confidence interval tahun 2005 dan 2012. Dengan begitu, maka H0 (null hypothesis) dapat diabaikan. Terdapat juga bukti yang meyakinkan mengenai perubahan atheism index di US pada tahun 2005 dan 2012.

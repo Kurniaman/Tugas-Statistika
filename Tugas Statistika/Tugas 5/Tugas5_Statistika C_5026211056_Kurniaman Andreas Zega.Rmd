@@ -1,0 +1,68 @@
+---
+title: "Tugas5_Statistika C_5026211056_Kurniaman Andreas Zega"
+output: html_document
+date: '2022-04-27'
+---
+
+# SUMBER DATA
+```{r load-data}
+download.file("http://www.openintro.org/stat/data/ames.RData", destfile = "ames.RData")
+load("ames.RData")
+```
+```{r source}
+population <- ames$Gr.Liv.Area
+samp <- sample(population, 60)
+samp_mean <- mean(samp)
+samp_sd <- sd(samp)
+```
+
+#ON YOUR OWN 1
+Using the following function (which was downloaded with the data set), 
+plot all intervals. What proportion of your confidence intervals include 
+the true population mean? Is this proportion exactly equal to the 
+confidence level? If not, explain why.
+##Jawaban
+``` {r explain proportion}
+for(i in 1:50){
+  samp <- sample(population, 60) 
+  samp_mean[i] <- mean(samp)    
+  samp_sd[i] <- sd(samp)    
+}
+lower_vector <- samp_mean - 1.96 * samp_sd / sqrt(60) 
+upper_vector <- samp_mean + 1.96 * samp_sd / sqrt(60)
+plot_ci(lower_vector, upper_vector, mean(population))
+```
+Dari plot yang ditampilkan,terdapat 4 dari 50 interval yang tidak mencakup nilai mu yakni 1499,6904. Untuk proporsi sendiri adalah sebesar 92% dimana nilainya tidak sama dengan confidence level. Untuk kasus ini, nilai confidence level dapat dianggap sebagai sebuah probabilitas yang mencakup true population mean.
+
+# ON YOUR OWN 2
+Pick a confidence level of your choosing, provided it is not 95%. What is 
+the appropriate critical value?
+##Jawaban 2
+``` {r appropriate critical value}
+cl <- 99
+alpha <- 1-(cl/100)
+cp <- 1-(alpha/2) 
+critical_value <- qnorm(cp)
+critical_value
+```
+
+# ON YOUR OWN 3
+Calculate 50 confidence intervals at the confidence level you chose in the 
+previous question. You do not need to obtain new samples, simply calculate 
+new intervals based on the sample means and standard deviations you have 
+already collected. Using the `plot_ci` function, plot all intervals and 
+calculate the proportion of intervals that include the true population 
+mean. How does this percentage compare to the confidence level selected for
+the intervals?
+## Jawaban 
+```{r compare}
+for(i in 1:50){
+  samp <- sample(population, 60) 
+  samp_mean[i] <- mean(samp)    
+  samp_sd[i] <- sd(samp)    
+}
+lower_vector <- samp_mean - critical_value * samp_sd / sqrt(60) 
+upper_vector <- samp_mean + critical_value * samp_sd / sqrt(60)
+plot_ci(lower_vector, upper_vector, mean(population))
+```
+Dari plot yang ditampilkan, 1 dari 50 interval tidak mencakup nilai mu yakni mu-nya sebesar 1499,6904. Untuk proporsi sendiri sebesar 98% dimana nilainya lebih rendah dari confidence level yang baru yaitu 99%.

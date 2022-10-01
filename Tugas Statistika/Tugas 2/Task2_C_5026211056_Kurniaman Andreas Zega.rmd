@@ -1,0 +1,90 @@
+---
+title: "Task2_C_5026211056_Kurniaman Andreas Zega.rmd"
+output: html_document
+date: '2022-04-05'
+---
+
+## Load data
+
+```{r load-data, eval=FALSE}
+source("http://www.openintro.org/stat/data/cdc.R")
+```
+## 1
+- Buat diagram scatterplot weight versus desired weight. Jelaskan hubungan antara kedua variabel tersebut.
+```{r plot weight vs desired weight}
+plot(cdc$weight,cdc$wtdesire, main = "Weight vs Desired Weight", xlab="weight", ylab="Desired Weight")
+```
+Answer :Hubungan yang terkandung dalam plot diatas menunjukkan adanya hubungan linier positif. Dimana setiap kenaikan weight(bobot saat ini) berbanding lurus dengan kenaikan desired weight(bobot yang diinginkan).
+## 2
+- Mari kita pertimbangkan variabel baru: perbedaan antara bobot yang diinginkan (`wtdesire`) dan bobot saat ini (`weight`). Buat variabel baru ini dengan mengurangi dua kolom dalam dataframe dan menetapkannya ke objek baru yang disebut `wdiff`. 
+```{r make wdiif}
+wdiff <- cdc$wtdesire-cdc$weight
+```
+
+## 3
+- Jenis data apa yang `wdiff`? Jika pengamatan `wdiff` adalah 0, apa artinya ini dari berat badan orang tersebut dan berat badan yang diinginkan. Bagaimana jika `wdiff` positif atau negatif?
+```{r type data wdiff & arti positif or negatif}
+typeof(wdiff)
+table(wdiff)
+```
+Answer : Berdasarkan hasil di atas, didapatkan jenis data wdiff berbentuk integer(bilangan bulat). Untuk wdiff yang berbentuk positif, artinya berat badan yang diinginkan responden tersebut lebih tinggi dari pada berat badan asli beliau(ingin menambah berat badan karena merasa berat badannya kurang baik). Sebaliknya, untuk wdiff yang berbentuk negatif, artinya berat badan yang diinginkan responden lebih rendan daripada berat badan aslinya (ingin mengurangi berat badan karena merasa kelebihan berat badan). Jika wdiff adalah 0, maka beratnya saat ini adalah berat yang diharapkan orang tersebut.
+
+## 4
+- Jelaskan distribusi `wdiff` berdasarkan pusatnya, bentuknya, dan penyebarannya, termasuk plot yang Anda gunakan. Apa yang didapatkan dari plot tersebut berdasarkan yang orang rasakan dari berat badan mereka saat ini?
+```{r summary wdiff}
+summary(wdiff)
+
+```
+```{r range, standar dev, var, IQR}
+# Range 
+max(wdiff)-min(wdiff)
+# Standar Deviasi
+sd(wdiff)
+# varians
+var(wdiff)
+# IQR
+0-(-21.00)
+```
+```{r hist wdiff}
+hist(wdiff, breaks=50)
+```
+
+Answer : 
+a) Hasil dari analisa di atas didadapat :
+1. Mean :-14.59
+2. Range : 800
+3. Standar Deviasi : 24.04586
+4. Varians : 578.2032
+5. Quar. 1 : -21.00
+   Quar. 2 (Median) : -10.00    
+   Quar. 3 : 0.00
+   IQR : 21
+b) Baik mean maupun median mendapatkan hasil minus. Ini karena kita mengurangkan antara wtdesire dengan weight. Ada outlier di kedua ujung menandaka bahwa ada sebagian orang yang ingin menurunkan secara besar-besaran disana serta ada juga sebagian yang ingin menambah berat badan secara besar-besaran(outlier). Dari histogram juga dapat dilihat menunjukkan adanya skewed left dimana mean lebih kiri daripada median. Dari IQR kita juga dapat melihat bahwa kebanyakan orang ingin kehilangan 0-21 pound dari berat badannya. Di Quartil 3 terdapat nilai 0, ini berarti 75% persen orang ingin mengurangi berat badan. Dari data ini didapatkan kesimpulan juga bahwa data menunjukkan kebanyakan orang ingin menurunkan berat badan dan sedikit dari sampel ingin menambah berat badan. 
+## 5
+- Menggunakan numerical summaries dan side-by-side box plot, tentukan apakah pria cenderung memandang berat badan mereka secara berbeda dari wanita.
+```{r summary male & female}
+male <- subset(wdiff, cdc$gender=="m")
+female <- subset(wdiff, cdc$gender=="f")
+summary(male)
+summary(female)
+```
+```{r boxplot}
+boxplot(wdiff ~ cdc$gender)
+```
+
+Answer : 
+Dari hasil numerical summaries dan boxplot, kita bisa melihat bahwa median dari wanita lebih rendah daripada pria. Karena tanda minus menandakan keinginan untuk menurunkan berat badan, maka disini didapat bahwa wanita cenderung lebih memandang berat badan daripada pria. 
+## 6
+- Sekarang saatnya untuk menjadi kreatif. Temukan mean dan standar deviasi dari `berat` dan tentukan proporsi dari berat badan yang berada dalam satu standar deviasi mean.
+```{r mean & standar deviasi}
+mean_data <-mean(cdc$weight)
+mean_data
+sd_data <- sd(cdc$weight)
+sd_data
+```
+```{r proportion}
+one_sd <-subset(cdc, cdc$weight>(mean_data-sd_data) & cdc$weight<mean_data+sd_data)
+nrow(one_sd)/nrow(cdc)
+```
+Answer : Mean data berat adalah 169.683 dan standar deviasi berat adalah 40.08097. Proporsi berat badan dalam satu standar deviasi mean adalah 70,76%.
+

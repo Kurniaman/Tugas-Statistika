@@ -1,0 +1,78 @@
+---
+title: "Tugas1_Statistika C_5026211056_Kurniaman Andreas Zega"
+output: html_document
+date: '2022-03-22'
+
+---
+# load data
+```{r load data present}
+source("http://www.openintro.org/stat/data/present.R")
+```
+```{r load data arbuthnot}
+source("http://www.openintro.org/stat/data/arbuthnot.R")
+```
+
+# Soal no.1
+1. Tahun berapa saja yang termasuk dalam kumpulan data ini? Apa dimensi dari dataframe dan apa saja nama variabel atau kolom pada data?
+- Tahun pada kumpulan data : 1940-2002
+```{r kumpulan data tahun}
+present$year
+```
+- Dimensi data : 
+```{r dimensi dataframe}
+dim(present)
+```
+-Nama variabel pada data: "year", "boys", "girls"
+```{r Nama dari variabel present}
+names(present)
+```
+# Soal no.2
+2.  Bagaimana jumlah data ini dibandingkan dengan data 
+   Arbuthnot? Apakah mereka berada pada skala yang sama?
+
+- summary data :   
+```{r summary data dari data present dan arbuthnot}
+summary(present)
+summary(arbuthnot)
+```
+- Jumlah data
+```{r data present dan arbuthnot}
+sum(present$boys, present$girls)
+sum(arbuthnot$boys,arbuthnot$girls)
+```
+- Dimensi :
+```{r dimensi data present dan arbuthnot}
+dim(present)
+dim(arbuthnot)
+```
+Jawab : Dari data ini, tampak jelas skala dari 2 data ini berbeda dimana dalam jumlah data dan dimensi saja data present terpaut jauh dari data arbuthnot.
+
+# Soal no.3
+Buatlah plot yang menampilkan rasio laki-laki dan perempuan untuk setiap tahun dalam kumpulan data. Apa yang kamu dapatkan?
+``` {r plot-boys-girls-ratio}
+present$ratio <- present$boys/present$girls
+plot(x = present$year, y = present$ratio, type = "l", xlab = "Tahun", ylab = "Rasio laki-laki dan perempuan")
+```
+Jawab : Dari grafik yang sudah ditampilkan, didapat bahwa ternyata rasio laki-laki dan perempuan di AS secara keseluruhan cenderung mengalami penurunan. Ratio tertinggi berada pada interval tahun 1940-1950. Sedangkan ratio terendah berada pada interval tahun 1990-2000.
+# Soal no.4
+Apakah pengamatan pada data Arbuthnot mengenai anak laki-laki yang dilahirkan memiliki proporsi yang lebih besar dibandingkan anak perempuan di AS? Sertakan gambaran plot dalam tanggapan Anda.
+```{r present-boys-vs-girls}
+present$boys > present$girls
+```
+
+```{r present-plot-boys-vs-girls}
+plot(x = present$year, y = present$boys, type = "l", col = "blue", xlab = "Tahun", ylab = "Jumlah Kelahiran")
+lines(x =  present$year, y = present$girls, col = "red")
+legend("bottomright", legend = c("Boys", "Girls"), col = c("blue", "red"), lty=1:1)
+
+```
+Jawab : Dari data yang dihasilkan, dapat diamati bahwa tiap tahunnya jumlah anak laki-laki selalu lebih banyak dari wanita
+# Soal no.5
+Pada tahun berapa kita melihat jumlah kelahiran terbanyak di AS?
+```{r present-total}
+present$total <- present$boys + present$girls
+```
+``` {r max-total-year}
+present$year[which.max(present$total)]
+```
+Jawab : Jumlah kelahiran terbanyak di AS yaitu pada tahun 1961

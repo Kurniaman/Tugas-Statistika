@@ -1,0 +1,100 @@
+---
+title: "Task4_C_5026211056_Kurniaman Andreas Zega"
+output: html_document
+date: '2022-04-20'
+---
+
+```{r load-data}
+download.file("http://www.openintro.org/stat/data/bdims.RData", destfile = "bdims.RData")
+load("bdims.RData")
+```
+```{r male-female}
+male <- subset(bdims,bdims$sex == 1)
+female <- subset(bdims,bdims$sex == 0)
+```
+
+## Soal 5
+Using the same technique, determine whether or not female weights appear to 
+come from a normal distribution.
+##Jawaban
+```{r female-weights}
+qqnormsim(female$wgt)
+```
+## Jawaban :
+Berdasarkan plot ini, dapat dilihat bahwa persebaran data berat badan wanita kemungkinan tidak normal karena adanya lengkungan pada beberapa simulasi. 
+
+
+# Soal  6
+Write out two probability questions that you would like to answer; one 
+regarding female heights and one regarding female weights.  Calculate the 
+those probabilities using both the theoretical normal distribution as well 
+as the empirical distribution (four probabilities in all).  Which variable,
+height or weight, had a closer agreement between the two methods?
+## Berapakah probabilitas wanita memiliki tinggi badan di bawah 165 cm?
+```{r female-height<165}
+fhgtmean <- mean(female$hgt)
+fhgtsd <- sd(female$hgt)
+pnorm(165, mean = fhgtmean, sd= fhgtsd)
+sum(female$hgt < 165)/ length(female$hgt)
+```
+## Berapakah probabilitas seorang wanita memiliki berat badan di atas 75 kg?
+```{r female-weight>75}
+fwgtmean <- mean(female$wgt)
+fwgtsd <- sd(female$wgt)
+pnorm(75, mean = fwgtmean, sd = fwgtsd,lower.tail=FALSE)
+sum(female$wgt>75)/ length(female$wgt)
+```
+## Jawaban :
+Dari data yang telah diolah di atas, variabel height pada wanita memiliki nilai yang lebih mirip saat diolah dengan 2 method.
+
+# === ON YOUR OWN ===
+
+# No. 1
+Now let's consider some of the other variables in the body dimensions dataset. Using the figures at the end of the exercises, match the histogram to its normal probability plot.  All of the variables have been standardized (first subtract the mean, then divide by the standard deviation), so the units won't be of any help.  If you are uncertain based on these figures, generate the plots in R to check.
+
+## a) The histogram for female biiliac (pelvic) diameter (`bii.di`) belongs to normal probability plot letter ____.
+```{r female-bii.di}
+hist(female$bii.di)
+qqnorm(female$bii.di)
+qqline(female$bii.di)
+```
+### Jawaban : Letter plot "B"
+## b) The histogram for female elbow diameter (`elb.di`) belongs to normal  probability plot letter ____.
+```{r female-elb.di}
+hist(female$elb.di)
+qqnorm(female$elb.di)
+qqline(female$elb.di)
+```
+### Jawaban : Letter plot "C"
+## c) The histogram for general age (`age`) belongs to normal probability  plot letter ____.
+```{r general-age}
+hist(bdims$age)
+qqnorm(bdims$age)
+qqline(bdims$age)
+```
+### Jawaban : Letter plot "D"
+##d.
+The histogram for female chest depth (`che.de`) belongs to normal probability plot letter ____.
+```{r female-che.de}
+hist(female$che.de)
+qqnorm(female$che.de)
+qqline(female$che.de)
+```
+## Jawaban : Letter plot "A"
+
+
+# No. 2
+Note that normal probability plots C and D have a slight stepwise pattern. Why do you think this is the case?
+##Jawaban
+Menurut saya, kasus ini disebabkan karena data yang diukur berbentuk discrete atau desimal. Selain itu, ini menjadi tanda bahwa distribusi yang terjadi adalah distribusi yang tidak normal. Ketika penginputan data usia, mereka tentu akan memberikan angka berupa nilai bulat dan bukan desimal. Hal inilah yang menyebabkan adanya slight stepwise pattern pada sumbu y di qqplot. Sumbu x sendiri ini mengacu pada persentil distribusi sehingga x-nya kontinu.
+
+
+# No. 3
+As you can see, normal probability plots can be used both to assess normality and visualize skewness. Make a normal probability plot for female knee diameter (`kne.di`).  Based on this normal probability plot, is this  variable left skewed, symmetric, or right skewed?  Use a histogram to confirm your findings.
+##Jawaban
+```{r female-kne.di}
+qqnorm(female$kne.di)
+qqline(female$kne.di)
+hist(female$kne.di, breaks = 30)
+```
+Berdasarkan histogram dan normal probability, data dari female knee diameter ini termasuk dalam right skewed. Hal ini dapat dilihat pada data yakni ujung kanan lebih rendah dan lebih banyak berkumpul pada sisi kiri.
